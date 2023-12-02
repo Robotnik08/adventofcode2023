@@ -1,0 +1,54 @@
+MAKE FUNC ARRAY INT getRGB (STRING input) {
+    MAKE ARRAY STRING rgb_str = ["red", "green", "blue"];
+    MAKE ARRAY INT rgb = [0,0,0];
+    MAKE ARRAY STRING vals = SPLIT(input, ",");
+    MAKE INT i = 0; DO {
+        MAKE INT c = 0; DO {
+            DO BREAK () WHEN (CONTAINS(vals#i, rgb_str#c));
+        } THEN {SET c+=1;} WHILE (c < 3);
+        SET rgb#c = STRINGTOINT(vals#i);
+    } THEN {SET i+=1;} WHILE (i < vals);
+    DO RETURN (rgb);
+};
+
+
+MAKE STRING input = READ ("day2/input.txt");
+MAKE ARRAY STRING games = SPLIT (input, "\n");
+
+MAKE INT amount = 100; // 100 games
+
+MAKE INT RED = 12; MAKE INT GREEN = 13; MAKE INT BLUE = 14;
+
+MAKE INT sum = 0;
+// split each game into sets
+MAKE INT g = 0; DO {
+    MAKE ARRAY STRING sets = SPLIT(SPLIT(games#g, ":")#1, ";");
+    // test for each set
+    MAKE BOOL valid = TRUE;
+
+    MAKE INT s = 0; DO {
+        MAKE ARRAY INT vals = getRGB(sets#s);
+        DO {
+            SET valid = FALSE;
+        } THEN BREAK() WHEN (vals#0 > RED || vals#1 > GREEN || vals#2 > BLUE);
+    } THEN {SET s += 1;} WHILE (s < sets);
+
+    DO {SET sum += g + 1;} WHEN (valid);
+} THEN {SET g += 1;} WHILE (g < amount);
+
+DO SAYLN ("Part 1: " + sum);
+
+SET sum = 0;
+SET g = 0; DO {
+    MAKE ARRAY STRING sets = SPLIT(SPLIT(games#g, ":")#1, ";");
+    // test for each set
+    MAKE ARRAY INT max = [0,0,0];
+
+    MAKE INT s = 0; DO {
+        MAKE ARRAY INT vals = getRGB(sets#s);
+        SET max = [MAX(max#0, vals#0), MAX(max#1, vals#1), MAX(max#2, vals#2)];
+    } THEN {SET s += 1;} WHILE (s < sets);
+    SET sum += max#0 * max#1 * max#2;
+} THEN {SET g += 1;} WHILE (g < amount);
+
+DO SAYLN ("Part 2: " + sum);
