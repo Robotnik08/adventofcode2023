@@ -1,0 +1,91 @@
+// Helpers
+MAKE FUNC BOOL isNum (CHAR c) {
+    DO RETURN (c >= '0' && c <= '9');
+};
+
+MAKE FUNC BOOL isSpecial (CHAR c) {
+    DO RETURN (!isNum(c) && c != '.');
+};
+
+MAKE FUNC BOOL checkValid (INT x, INT y) {
+    MAKE INT l = MAX(0, x - 1); DO {
+        MAKE INT c = MAX(0, y - 1); DO {
+            DO RETURN (TRUE) WHEN (isSpecial(lines#l#c));
+        } THEN {SET c+=1;} WHILE (c <= MIN(y + 1, width - 1));
+    } THEN {SET l+=1;} WHILE (l <= MIN(x + 1, len - 1));
+    DO RETURN (FALSE);
+};
+
+MAKE FUNC INT getProduct (INT x, INT y) {
+    MAKE ARRAY INT nums = [];
+
+    MAKE INT l = MAX(0, x - 1); DO {
+        MAKE INT c = MAX(0, y - 1); DO {
+            // we check if a number is detected
+            DO {
+                // get the full number
+                MAKE STRING num = "";
+                MAKE INT s = c;
+                DO {
+                    SET num += lines#l#c;
+                    SET c += 1;
+                } WHILE (c <= width && isNum(lines#l#c));
+
+                // also check in the other direction
+                MAKE INT c2 = s - 1; DO {
+                    SET num = lines#l#c2 + num;
+                    SET c2 -= 1;
+                } WHILE (c2 >= 0 && isNum(lines#l#c2));
+
+                // add the number to the array
+                SET nums += [STRINGTOINT(num)];
+            } WHEN (isNum(lines#l#c));
+        } THEN {SET c+=1;} WHILE (c <= MIN(y + 1, width - 1));
+    } THEN {SET l+=1;} WHILE (l <= MIN(x + 1, len - 1));
+
+    DO RETURN (0) WHEN (nums != 2); // we need exactly 2 numbers
+    DO RETURN (nums#0 * nums#1);
+};
+
+// Main
+MAKE STRING input = READ ("day3/input.txt");
+MAKE ARRAY STRING lines = SPLIT (input, "\n");
+
+MAKE INT len = (INT)lines;
+MAKE INT width = (INT)(lines#0);
+
+// Part 1
+MAKE LONG sum = 0;
+
+MAKE INT l = 0; DO {
+    MAKE INT c = 0; DO {
+        MAKE STRING num = "";
+        MAKE BOOL isValid = FALSE;
+        DO {
+            SET num += lines#l#c;
+            DO {
+                SET isValid = TRUE;
+            } WHEN (!isValid && checkValid(l, c));
+            SET c += 1;
+        } WHILE (c < len && isNum(lines#l#c));
+        DO {
+            SET sum += STRINGTOINT(num);
+        } WHEN (isValid && num);
+    } THEN {SET c+=1;} WHILE (c < width);
+} THEN {SET l+=1;} WHILE (l < len);
+
+DO SAYLN ("Part 1: " + sum);
+
+// Part 2
+SET sum = 0;
+
+
+SET l = 0; DO {
+    MAKE INT c = 0; DO {
+        DO {
+            SET sum += getProduct(l, c);
+        } WHEN (lines#l#c == '*');
+    } THEN {SET c+=1;} WHILE (c < width);
+} THEN {SET l+=1;} WHILE (l < len);
+
+DO SAYLN ("Part 2: " + sum);
