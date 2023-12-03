@@ -13,4 +13,8 @@ Day 1 was quite easy, I did need to fix a bug with the REPLACE function. <br>
 
 ## Day 2
 
-Coming soon...
+Day 2 was a bit easier than day 1, I did need to add a few functions to the language, but nothing too complicated. <br>
+
+## Day 3
+
+Day 3 was a step up in difficulty, My language was ready for it though, no bugs found. <br>
