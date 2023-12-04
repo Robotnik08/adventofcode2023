@@ -18,3 +18,7 @@ Day 2 was a bit easier than day 1, I did need to add a few functions to the lang
 ## Day 3
 
 Day 3 was a step up in difficulty, My language was ready for it though, no bugs found. <br>
+
+## Day 4
+
+My initial solution was bad and slow, but I managed to make it quick. Part 2 seemed menacing, but was really easy
