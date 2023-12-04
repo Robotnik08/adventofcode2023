@@ -1,0 +1,49 @@
+MAKE STRING input = READ("day4/input.txt");
+MAKE ARRAY STRING lines = SPLIT(input, "\n");
+
+MAKE ARRAY ARRAY INT winners = [];
+MAKE ARRAY ARRAY INT games = [];
+
+
+
+MAKE INT game_len = (INT)lines;
+
+
+MAKE INT sum = 0;
+
+// Parse the input
+MAKE INT i = 0; DO {
+    MAKE STRING winstring = SPLIT(SPLIT(lines#i, ":")#1, "|")#0;
+    MAKE STRING gamestring = SPLIT(SPLIT(lines#i, ":")#1, "|")#1;
+
+    MAKE ARRAY STRING win = SPLIT(winstring, " ");
+    MAKE ARRAY STRING game = SPLIT(gamestring, " ");
+
+    SET winners += [[]];
+
+    MAKE INT j = 0; DO {
+        SET winners#i += [STRINGTOINT(win#j)];
+    } THEN {SET j += 1;} WHILE (j < win);
+
+    SET games += [[]];
+
+    MAKE INT k = 0; DO {
+        SET games#i += [STRINGTOINT(game#k)];
+    } THEN {SET k += 1;} WHILE (k < game);
+} THEN {SET i += 1;} WHILE (i < game_len);
+
+// Play the games
+SET i = 0; DO {
+    MAKE INT result = 0;
+    // MAKE INT j = 0; DO {
+    //     MAKE INT k = 0; DO {
+    //         DO {
+    //             SET result = (result << 1) + !result;
+    //         } WHEN (winners#i#j == games#i#k);
+    //     } THEN {SET k += 1;} WHILE (k < games#i);
+    // } THEN {SET j += 1;} WHILE (j < winners#i);
+
+    SET sum += result;
+} THEN {SET i += 1;} WHILE (i < game_len);
+
+DO SAYLN ("Part 1: " + sum);
