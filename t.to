@@ -1,7 +1,0 @@
-DO {
-    DO SAY ("test");
-} WHEN (FALSE) ELSE WHEN (TRUE) {
-    DO SAY ("test2");
-} ELSE {
-    DO SAY ("test3");
-}
