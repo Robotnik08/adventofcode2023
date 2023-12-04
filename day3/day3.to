@@ -11,8 +11,10 @@ MAKE FUNC BOOL checkValid (INT x, INT y) {
     MAKE INT l = MAX(0, x - 1); DO {
         MAKE INT c = MAX(0, y - 1); DO {
             DO RETURN (TRUE) WHEN (isSpecial(lines#l#c));
-        } THEN {SET c+=1;} WHILE (c <= MIN(y + 1, width - 1));
-    } THEN {SET l+=1;} WHILE (l <= MIN(x + 1, len - 1));
+            SET c+=1;
+        } WHILE (c <= MIN(y + 1, width - 1));
+        SET l+=1;
+    } WHILE (l <= MIN(x + 1, len - 1));
     DO RETURN (FALSE);
 };
 
@@ -40,8 +42,10 @@ MAKE FUNC INT getProduct (INT x, INT y) {
                 // add the number to the array
                 SET nums += [STRINGTOINT(num)];
             } WHEN (isNum(lines#l#c));
-        } THEN {SET c+=1;} WHILE (c <= MIN(y + 1, width - 1));
-    } THEN {SET l+=1;} WHILE (l <= MIN(x + 1, len - 1));
+            SET c+=1;
+        } WHILE (c <= MIN(y + 1, width - 1));
+        SET l+=1;
+    } WHILE (l <= MIN(x + 1, len - 1));
 
     DO RETURN (0) WHEN (nums != 2); // we need exactly 2 numbers
     DO RETURN (nums#0 * nums#1);
@@ -71,8 +75,10 @@ MAKE INT l = 0; DO {
         DO {
             SET sum += STRINGTOINT(num);
         } WHEN (isValid && num);
-    } THEN {SET c+=1;} WHILE (c < width);
-} THEN {SET l+=1;} WHILE (l < len);
+        SET c+=1;
+    } WHILE (c < width);
+    SET l+=1;
+} WHILE (l < len);
 
 DO SAYLN ("Part 1: " + sum);
 
@@ -85,7 +91,9 @@ SET l = 0; DO {
         DO {
             SET sum += getProduct(l, c);
         } WHEN (lines#l#c == '*');
-    } THEN {SET c+=1;} WHILE (c < width);
-} THEN {SET l+=1;} WHILE (l < len);
+        SET c+=1;
+    } WHILE (c < width);
+    SET l+=1;
+} WHILE (l < len);
 
 DO SAYLN ("Part 2: " + sum);

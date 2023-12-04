@@ -5,9 +5,11 @@ MAKE FUNC ARRAY INT getRGB (STRING input) {
     MAKE INT i = 0; DO {
         MAKE INT c = 0; DO {
             DO BREAK () WHEN (CONTAINS(vals#i, rgb_str#c));
-        } THEN {SET c+=1;} WHILE (c < 3);
+            SET c+=1;
+        } WHILE (c < 3);
         SET rgb#c = STRINGTOINT(vals#i);
-    } THEN {SET i+=1;} WHILE (i < vals);
+        SET i+=1;
+    } WHILE (i < vals);
     DO RETURN (rgb);
 };
 
@@ -34,7 +36,8 @@ MAKE INT g = 0; DO {
     } THEN {SET s += 1;} WHILE (s < sets);
 
     DO {SET sum += g + 1;} WHEN (valid);
-} THEN {SET g += 1;} WHILE (g < amount);
+    SET g += 1;
+} WHILE (g < amount);
 
 DO SAYLN ("Part 1: " + sum);
 
@@ -47,8 +50,10 @@ SET g = 0; DO {
     MAKE INT s = 0; DO {
         MAKE ARRAY INT vals = getRGB(sets#s);
         SET max = [MAX(max#0, vals#0), MAX(max#1, vals#1), MAX(max#2, vals#2)];
-    } THEN {SET s += 1;} WHILE (s < sets);
+        SET s += 1;
+    } WHILE (s < sets);
     SET sum += max#0 * max#1 * max#2;
-} THEN {SET g += 1;} WHILE (g < amount);
+    SET g += 1;
+} WHILE (g < amount);
 
 DO SAYLN ("Part 2: " + sum);

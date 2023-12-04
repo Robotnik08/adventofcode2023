@@ -14,10 +14,12 @@ MAKE FUNC INT count (ARRAY STRING lines) {
                 } WHEN (!first);
                 SET last = lines#i#j - '0';
             } WHEN (lines#i#j > '0' && lines#i#j <= '9');
-        } THEN {SET j += 1;} WHILE (j < lines#i);
+            SET j += 1;
+        } WHILE (j < lines#i);
         
         SET sum += first*10 + last;
-    } THEN {SET i += 1;} WHILE (i < lines);
+        SET i += 1;
+    } WHILE (i < lines);
     DO RETURN(sum);
 };
 
@@ -28,8 +30,10 @@ MAKE FUNC ARRAY STRING replace_nums (ARRAY STRING lines) {
     MAKE INT i = 0; DO {
         MAKE INT num = 1; DO {
             SET lines#i = REPLACE(lines#i, full_num#num, (STRING)(full_num#num#0) + num + full_num#num#-2);
-        } THEN {SET num += 1;} WHILE (num < 10);
-    } THEN {SET i += 1;} WHILE (i < lines);
+            SET num += 1;
+        } WHILE (num < 10);
+        SET i += 1;
+    } WHILE (i < lines);
     DO RETURN(lines);
 };
 

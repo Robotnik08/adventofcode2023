@@ -6,11 +6,7 @@ MAKE INT game_len = (INT)lines;
 MAKE INT sum = 0;
 MAKE INT sum2 = 0;
 
-MAKE ARRAY INT copies = [];
-MAKE INT c = 0; DO {
-    SET copies += [1];
-    SET c += 1;
-} WHILE (c < game_len);
+MAKE ARRAY INT copies = FILL(1, game_len);
 
 
 MAKE INT i = 0; DO {
@@ -30,7 +26,7 @@ MAKE INT i = 0; DO {
         SET j += 1;
     } WHILE (j < win);
 
-    MAKE INT c = i+1; DO {
+    MAKE INT c = i + 1; DO {
         SET copies#c += copies#i;
         SET c += 1;
     } WHILE (c < i + amount + 1 && c < game_len);
@@ -42,7 +38,7 @@ MAKE INT i = 0; DO {
 
 DO SAYLN ("Part 1: " + sum);
 
-SET c = 0; DO {
+MAKE INT c = 0; DO {
     SET sum2 += copies#c;
     SET c += 1;
 } WHILE (c < game_len);
