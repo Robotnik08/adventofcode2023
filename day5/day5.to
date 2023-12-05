@@ -12,8 +12,6 @@ DO {
 
 SET results = seeds;
 
-MAKE ARRAY INT map = [];
-
 MAKE INT m = 2; DO {
     DO {SET m += 1;} THEN CONTINUE () THEN {
         SET map += [[-1, -1, -1]];
