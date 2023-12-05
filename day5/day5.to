@@ -1,0 +1,52 @@
+MAKE STRING input = READ("day5/input.txt");
+MAKE ARRAY STRING lines = SPLIT(input, "\n");
+
+MAKE ARRAY STRING seed_input = SPLIT(lines#0, " ");
+MAKE ARRAY LONG seeds = [];
+MAKE ARRAY LONG results = [];
+MAKE ARRAY ARRAY LONG map = [];
+
+DO {
+    SET seeds += [STRINGTOINT(seed_input#(seeds+1))];
+} WHILE (seeds < seed_input-1);
+
+SET results = seeds;
+
+MAKE ARRAY INT map = [];
+
+MAKE INT m = 2; DO {
+    DO {SET m += 1;} THEN CONTINUE () THEN {
+        SET map += [[-1, -1, -1]];
+    } WHEN (lines#m#-2 == ':');
+    MAKE ARRAY STRING mstr = SPLIT (lines#m, " ");
+    SET map += [[STRINGTOINT(mstr#0), STRINGTOINT(mstr#1), STRINGTOINT(mstr#2)]];
+
+    SET m += 1;
+} WHILE (m < lines);
+
+MAKE INT j = 0; DO {
+    MAKE INT len = (INT)map;
+    MAKE BOOL found = FALSE;
+    MAKE INT i = 0; DO {
+        DO {
+            SET seeds#j = results#j;
+            SET i += 1;
+            SET found = FALSE;
+        } THEN CONTINUE () WHEN (map#i#0 == -1);
+        DO {
+            SET found = TRUE;
+            SET results#j = seeds#j + map#i#0 - map#i#1;
+        } WHEN (seeds#j >= map#i#1 && seeds#j < map#i#2 + map#i#1);
+        SET i += 1;
+    } WHILE (i < len);
+    SET j += 1;
+} WHILE (j < seeds);
+
+
+MAKE LONG min = 9223372036854775807;
+MAKE INT r = 0; DO {
+    SET min = min <| results#r;
+    SET r += 1;
+} WHILE (r < results);
+
+DO SAYLN ("Part 1: ", min);
