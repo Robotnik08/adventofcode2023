@@ -4,23 +4,16 @@ MAKE INT len = (INT)SPLIT(SPLIT(input, "\n")#0, " ") - 1;
 
 MAKE LONG product = 1;
 
+
+// Part 1
+
 MAKE INT i = 0; DO {
-    MAKE ARRAY LONG toBeat = [STRINGTOINT(SPLIT(SPLIT(input, "\n")#0, " ")#(i + 1)), STRINGTOINT(SPLIT(SPLIT(input, "\n")#1, " ")#(i + 1))];
-    
-    MAKE LONG minWin = 0;
-    MAKE LONG maxWin = 0;
+    MAKE ARRAY LONG race = [STRINGTOINT(SPLIT(SPLIT(input, "\n")#0, " ")#(i + 1)), STRINGTOINT(SPLIT(SPLIT(input, "\n")#1, " ")#(i + 1))];
+    MAKE ARRAY DOUBLE bounds = QUADRATIC(1,race#0,race#1 + 1);
 
+    MAKE LONG minWin = CEIL(MIN(bounds#0, bounds#1));
+    MAKE LONG maxWin = FLOOR(MAX(bounds#0, bounds#1));
 
-    MAKE INT j = 0; DO {
-        MAKE LONG result = (toBeat#0 - j) * j;
-        DO {
-            DO {
-                SET minWin = j;
-            } WHEN (!minWin);
-            SET maxWin = j;
-        } WHEN (result > toBeat#1) ELSE BREAK () WHEN (minWin);
-        SET j += 1;
-    } WHILE (j < toBeat#0);
     SET product *= maxWin - minWin + 1;
     SET i += 1;
 } WHILE (i < len);
@@ -29,20 +22,11 @@ DO SAYLN ("Part 1: " + product);
 
 // Part 2
 
-MAKE ARRAY LONG toBeat = [STRINGTOINT(REPLACE(SPLIT(SPLIT(input, "\n")#0, ":")#1, " ", "")), STRINGTOINT(REPLACE(SPLIT(SPLIT(input, "\n")#1, ":")#1, " ", ""))];
+MAKE ARRAY LONG race = [STRINGTOINT(REPLACE(SPLIT(SPLIT(input, "\n")#0, ":")#1, " ", "")), STRINGTOINT(REPLACE(SPLIT(SPLIT(input, "\n")#1, ":")#1, " ", ""))];
 
-MAKE LONG minWin = 0;
-MAKE LONG maxWin = 0;
+MAKE ARRAY DOUBLE bounds = QUADRATIC(1,race#0,race#1 + 1);
 
-MAKE INT j = 0; DO {
-    MAKE LONG result = (toBeat#0 - j) * j;
-    DO {
-        DO {
-            SET minWin = j;
-        } WHEN (!minWin);
-        SET maxWin = j;
-    } WHEN (result > toBeat#1) ELSE BREAK () WHEN (minWin);
-    SET j += 1;
-} WHILE (j < toBeat#0);
+MAKE LONG minWin = CEIL(MIN(bounds#0, bounds#1));
+MAKE LONG maxWin = FLOOR(MAX(bounds#0, bounds#1));
 
 DO SAYLN ("Part 2: " + (maxWin - minWin + 1));

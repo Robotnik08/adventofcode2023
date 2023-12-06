@@ -22,3 +22,13 @@ Day 3 was a step up in difficulty, My language was ready for it though, no bugs 
 ## Day 4
 
 My initial solution was bad and slow, but I managed to make it quick. Part 2 seemed menacing, but was really easy
+
+## Day 5
+
+Day 5 was a good challenge, I figured it out in the end, but it took me a while. <br>
+
+## Day 6
+
+Day 6 was easier, originally I brute forced it, but I managed to make it faster by using a quadratic formula. <br>
+I researched about it and it's fun how it's used really well in the puzzle. <br>
+I added a QUADRATIC function in the language for this purpose. <br>
