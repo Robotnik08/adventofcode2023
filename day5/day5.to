@@ -1,3 +1,7 @@
+MAKE FUNC BOOL inRange (ARRAY LONG range, LONG value) {
+    DO RETURN (value >= range#0 && value < range#1);
+};
+
 MAKE STRING input = READ("day5/input.txt");
 MAKE ARRAY STRING lines = SPLIT(input, "\n");
 
@@ -22,24 +26,21 @@ MAKE INT m = 2; DO {
     SET m += 1;
 } WHILE (m < lines);
 
+// Part 1
 MAKE INT j = 0; DO {
-    MAKE INT len = (INT)map;
-    MAKE BOOL found = FALSE;
+    MAKE INT m_len = (INT)map;
     MAKE INT i = 0; DO {
         DO {
             SET seeds#j = results#j;
             SET i += 1;
-            SET found = FALSE;
         } THEN CONTINUE () WHEN (map#i#0 == -1);
         DO {
-            SET found = TRUE;
             SET results#j = seeds#j + map#i#0 - map#i#1;
         } WHEN (seeds#j >= map#i#1 && seeds#j < map#i#2 + map#i#1);
         SET i += 1;
-    } WHILE (i < len);
+    } WHILE (i < m_len);
     SET j += 1;
 } WHILE (j < seeds);
-
 
 MAKE LONG min = 9223372036854775807;
 MAKE INT r = 0; DO {
@@ -48,3 +49,60 @@ MAKE INT r = 0; DO {
 } WHILE (r < results);
 
 DO SAYLN ("Part 1: ", min);
+
+// Part 2 (get of a range of seeds)
+
+SET seeds = [];
+DO {
+    SET seeds += [STRINGTOINT(seed_input#(seeds+1))];
+} WHILE (seeds < seed_input-1);
+
+MAKE ARRAY ARRAY LONG ranges = [];
+MAKE ARRAY ARRAY LONG final_ranges = [];
+
+MAKE INT k = 0; DO {
+    SET ranges += [[seeds#k, seeds#k + seeds#(k+1)]];
+    SET k += 2;
+} WHILE (k < seeds);
+
+MAKE INT i = 0; DO {
+    MAKE INT m_len = (INT)map;
+
+    MAKE ARRAY ARRAY LONG current_ranges = [];
+    MAKE ARRAY ARRAY LONG next_ranges = [];
+
+    SET next_ranges += [ranges#i];
+
+    MAKE INT j = 0; DO {
+        DO {
+            SET next_ranges = current_ranges;
+            SET current_ranges = [];
+            SET j += 1;
+        } THEN CONTINUE () WHEN (map#j#0 == -1);
+
+        MAKE INT r = 0; DO {
+            MAKE LONG start = next_ranges#r#0;
+            MAKE LONG end = next_ranges#r#1;
+
+            MAKE ARRAY LONG range = [map#j#1, map#j#2 + map#j#1];
+
+            DO {
+                SET current_ranges += [[MAX(start, range#0) + map#j#0 - map#j#1, MIN(end, range#1) + map#j#0 - map#j#1]];
+            } WHEN (inRange(range, start) || inRange(range, end));
+
+            SET r += 1;
+        } WHILE (r < next_ranges);
+        
+        SET j += 1;
+    } WHILE (j < m_len);
+    SET final_ranges += current_ranges;
+    SET i += 1;
+} WHILE (i < ranges);
+
+SET min = 9223372036854775807;
+SET r = 0; DO {
+    SET min = min <| final_ranges#r#0;
+    SET r += 1;
+} WHILE (r < final_ranges);
+
+DO SAYLN ("Part 2: ", min);
