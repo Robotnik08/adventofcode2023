@@ -1,0 +1,50 @@
+MAKE STRING input = READ("day7/input.txt");
+MAKE ARRAY STRING lines = SPLIT(input, "\n");
+MAKE ARRAY INT scores = FILL(0, lines);
+MAKE ARRAY STRING sortedGames = [];
+
+MAKE ARRAY CHAR cardTypes = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+
+MAKE FUNC INT compareCards (STRING a, STRING b) {
+    DO {
+        DO IF (a#i == b#i) THEN 
+            CONTINUE
+        ELSE IF (INDEXOF(cardTypes, a#i) > INDEXOF(cardTypes, b#i)) THEN 
+            RETURN (1)
+        ELSE 
+            RETURN (-1);
+    } FOR (RANGE(1, 5) => i);
+
+    DO RETURN (0);
+};
+
+MAKE FUNC INT getType (STRING card) {
+    MAKE ARRAY INT counts = FILL(0, cardTypes);
+    DO {
+        SET counts#i = COUNT(card, cardTypes#i);
+    } FOR (RANGE(cardTypes) => i);
+
+    SET counts = ARRAYREVERSE(ARRAYSORT(counts));
+    
+    DO IF (counts#0 == 5) THEN 
+        RETURN (6) // five of a kind
+    ELSE IF (counts#0 == 4) THEN 
+        RETURN (5) // four of a kind
+    ELSE IF (counts#0 == 3 && counts#1 == 2) THEN 
+        RETURN (4) // full house
+    ELSE IF (counts#0 == 3) THEN 
+        RETURN (3) // three of a kind
+    ELSE IF (counts#0 == 2 && counts#1 == 2) THEN 
+        RETURN (2) // two pair
+    ELSE IF (counts#0 == 2) THEN 
+        RETURN (1) // one pair
+    ELSE 
+        RETURN (0); // high card is the lowest score
+};
+
+// get Scores
+DO {
+    SET scores#line = getType(SPLIT(lines#line, " ")#0);
+} FOR (RANGE(lines) => line);
+
+DO SAYLN (scores);
